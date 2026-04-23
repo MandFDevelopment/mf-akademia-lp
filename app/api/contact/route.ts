@@ -9,6 +9,31 @@ import { checkRateLimit, clientKeyFromHeaders } from "@/lib/rate-limit"
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 
+/**
+ * Origins the contact form is allowed to be submitted from.
+ *
+ * - `NEXT_PUBLIC_SITE_URL` (production canonical origin, if set)
+ * - `VERCEL_URL` (per-deployment preview origin, auto-injected by Vercel)
+ * - `http://localhost:3000` for local dev
+ *
+ * A request with NO `Origin` header (e.g. curl, server-to-server) is allowed
+ * through — those cannot be driven by a browser on a third-party site.
+ */
+function isAllowedOrigin(origin: string | null): boolean {
+  if (!origin) return true
+  const allowed = new Set<string>([
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+  ])
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    allowed.add(process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, ""))
+  }
+  if (process.env.VERCEL_URL) {
+    allowed.add(`https://${process.env.VERCEL_URL}`)
+  }
+  return allowed.has(origin.replace(/\/$/, ""))
+}
+
 type ChatCardWidget =
   | { decoratedText: { topLabel?: string; text: string; wrapText?: boolean } }
   | { textParagraph: { text: string } }
@@ -29,7 +54,18 @@ function labelFor<T extends { value: string; label: string }>(
 }
 
 export async function POST(req: Request) {
-  // Rate limit first — don't even parse JSON for obvious abuse.
+  // Block cross-origin submissions — the form is only ever submitted from our
+  // own LP. curl / tooling (no Origin header) is still allowed.
+  const origin = req.headers.get("origin")
+  if (!isAllowedOrigin(origin)) {
+    console.warn("[contact] rejected unexpected origin:", origin)
+    return NextResponse.json(
+      { ok: false, error: "Forbidden" },
+      { status: 403 },
+    )
+  }
+
+  // Rate limit — don't even parse JSON for obvious abuse.
   const key = clientKeyFromHeaders(req.headers)
   const rl = checkRateLimit(key, 3)
   if (!rl.ok) {
@@ -153,8 +189,9 @@ export async function POST(req: Request) {
     })
     if (!res.ok) {
       const text = await res.text().catch(() => "")
+      // Truncate in case the upstream error echoes the webhook URL back.
       console.error(
-        `[contact] Google Chat webhook returned ${res.status}: ${text}`,
+        `[contact] Google Chat webhook returned ${res.status}: ${text.slice(0, 200)}`,
       )
       return NextResponse.json({ ok: true, delivered: false })
     }

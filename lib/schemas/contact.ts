@@ -31,7 +31,7 @@ export const HEADCOUNT_OPTIONS: ReadonlyArray<Option<HeadcountValue>> = [
 export const PLAN_OPTIONS: ReadonlyArray<Option<PlanValue>> = [
   { value: "Starter", label: "Starter (48 万円/人)" },
   { value: "Standard", label: "Standard (96 万円/人)" },
-  { value: "Premium", label: "Premium (144 万円/人)" },
+  { value: "Premium", label: "Premium (102 万円/人)" },
   { value: "Undecided", label: "未定・相談したい" },
 ]
 

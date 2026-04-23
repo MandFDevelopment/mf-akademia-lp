@@ -47,7 +47,7 @@ export const PLANS: Plan[] = [
   {
     id: "Premium",
     name: "Premium",
-    price: 1_440_000,
+    price: 1_020_000,
     tracks: 18,
     hours: 68,
     description: "全社展開・BIM マネージャ育成まで視野に入れた方向け。",
