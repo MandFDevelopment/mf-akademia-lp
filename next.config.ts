@@ -1,7 +1,42 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
+
+const securityHeaders: { key: string; value: string }[] = [
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), payment=()",
+  },
+  // Conservative baseline. `'unsafe-inline'` on style-src covers Tailwind and
+  // shadcn's inline styles; on script-src it's needed for Next.js' inline
+  // runtime. If we move off Turbopack we can switch to a nonce-based CSP.
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' data: https://fonts.gstatic.com",
+      "img-src 'self' data: blob:",
+      "connect-src 'self'",
+      "frame-src https://www.youtube.com https://youtube.com",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; "),
+  },
+]
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: securityHeaders,
+      },
+    ]
+  },
+}
 
-export default nextConfig;
+export default nextConfig

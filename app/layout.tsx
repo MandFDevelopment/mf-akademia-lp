@@ -12,7 +12,7 @@ const notoSansJP = Noto_Sans_JP({
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mf-akademia-lp.vercel.app";
 const title = "AI × BIM / CAD リスキリング研修 | 株式会社 M&F";
 const description =
-  "建設業向け AI × BIM/CAD 研修動画 432 本。人材開発支援助成金 3/4 対応、1 人あたり実質負担 24 万円から。";
+  "建設業向け AI × BIM/CAD 研修動画 432 本。人材開発支援助成金 3/4 対応、1 人あたり実質負担 12 万円から。";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -56,9 +56,7 @@ export const metadata: Metadata = {
     description,
     images: ["/og-image.png"],
   },
-  icons: {
-    icon: "/favicon.ico",
-  },
+  // Favicon / apple-icon are auto-detected from app/icon.png and app/apple-icon.png
   robots: {
     index: true,
     follow: true,

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070D24"/>
+      <stop offset="1" stop-color="#0F1B3C"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.15" r="0.55">
+      <stop offset="0" stop-color="#F59E0B" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#F59E0B" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <g font-family="'Noto Sans JP','Helvetica Neue',Arial,sans-serif" fill="#FFFFFF">
+    <text x="80" y="200" font-size="32" font-weight="500" letter-spacing="6" fill="#F59E0B">MF-AKADEMIA</text>
+    <text x="80" y="320" font-size="78" font-weight="800" letter-spacing="-1">AI &#215; BIM &#47; CAD</text>
+    <text x="80" y="410" font-size="78" font-weight="800" letter-spacing="-1">リスキリング研修</text>
+    <text x="80" y="500" font-size="28" font-weight="500" fill="#C8D1EA">全 432 本 &#47; 人材開発支援助成金 3&#47;4 対応</text>
+    <text x="80" y="560" font-size="22" font-weight="400" fill="#9AA4C7">株式会社 M&#38;F</text>
+  </g>
+  <rect x="1080" y="60" width="56" height="6" fill="#F59E0B"/>
+</svg>

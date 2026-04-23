@@ -1,4 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "regions": ["hnd1"]
+  "regions": ["hnd1"],
+  "functions": {
+    "app/api/contact/route.ts": {
+      "maxDuration": 10
+    }
+  }
 }
