@@ -5,34 +5,10 @@ import {
   PLAN_OPTIONS,
 } from "@/lib/schemas/contact"
 import { checkRateLimit, clientKeyFromHeaders } from "@/lib/rate-limit"
+import { isAllowedOrigin } from "@/lib/allowed-origin"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
-
-/**
- * Origins the contact form is allowed to be submitted from.
- *
- * - `NEXT_PUBLIC_SITE_URL` (production canonical origin, if set)
- * - `VERCEL_URL` (per-deployment preview origin, auto-injected by Vercel)
- * - `http://localhost:3000` for local dev
- *
- * A request with NO `Origin` header (e.g. curl, server-to-server) is allowed
- * through — those cannot be driven by a browser on a third-party site.
- */
-function isAllowedOrigin(origin: string | null): boolean {
-  if (!origin) return true
-  const allowed = new Set<string>([
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-  ])
-  if (process.env.NEXT_PUBLIC_SITE_URL) {
-    allowed.add(process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, ""))
-  }
-  if (process.env.VERCEL_URL) {
-    allowed.add(`https://${process.env.VERCEL_URL}`)
-  }
-  return allowed.has(origin.replace(/\/$/, ""))
-}
 
 type ChatCardWidget =
   | { decoratedText: { topLabel?: string; text: string; wrapText?: boolean } }
