@@ -35,16 +35,12 @@ export function Hero() {
           MF-AKADEMIA / 建設業向けリスキリング
         </motion.p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl"
-        >
+        {/* LCP element — render immediately (no initial opacity:0) so LCP fires fast */}
+        <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
           建設業の AI 活用を、
           <br className="hidden sm:inline" />
           <span className="text-brand-amber">6 ヶ月</span>で標準化する。
-        </motion.h1>
+        </h1>
 
         <motion.p
           initial={{ opacity: 0, y: 18 }}

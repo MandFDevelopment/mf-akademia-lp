@@ -5,8 +5,9 @@ import "./globals.css";
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
   subsets: ["latin"],
-  weight: ["400", "500", "700", "900"],
+  weight: ["400", "500", "700"],
   display: "swap",
+  preload: true,
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mf-akademia-lp.vercel.app";
