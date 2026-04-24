@@ -89,18 +89,48 @@ vercel              # Preview デプロイ
 
 | 変数 | 用途 |
 | --- | --- |
-| `RESEND_API_KEY` | 問い合わせフォーム → メール送信 |
-| `CONTACT_MAIL_TO` | 問い合わせ通知の宛先 |
-| `NEXT_PUBLIC_SITE_URL` | OGP の絶対 URL (デフォルト: Vercel 自動 URL) |
+| `GOOGLE_CHAT_WEBHOOK_URL` | 問い合わせフォーム → Google Chat スペース通知 |
+| `RESEND_API_KEY` | 問い合わせフォーム → Resend 経由のメール送信 |
+| `RESEND_FROM_EMAIL` | 送信元 (例: `MF-AKADEMIA <onboarding@resend.dev>`) |
+| `CONTACT_NOTIFY_TO` | 社内通知メールの宛先 (例: `m.moriya@m-and-f.jp`) |
+| `NEXT_PUBLIC_SITE_URL` | OGP の絶対 URL + Origin check の許可ドメイン |
 
-## 残タスク (セッション 2 以降)
+`.env.example` をテンプレとして利用。実値は Vercel Dashboard / CLI 経由でのみ設定し、リポには残さない。
 
-- Hero / Problem / Solution / Curriculum / Pricing / Grant / FAQ / Contact セクション実装
-- 問い合わせフォーム → Resend API 接続
-- OG 画像 (1200×630) 作成
-- favicon 差し替え (現状は Next.js デフォルト)
-- Google Analytics / Search Console 設定
-- 本番ドメイン接続 (決まり次第)
+## メール送信 (Resend)
+
+問い合わせフォーム送信時に、Google Chat 通知と並行して 2 通送信:
+- **お客様への自動返信**: `送信先 = data.email` / `Subject = 【MF-AKADEMIA】お問い合わせありがとうございます` / プレーンテキスト
+- **社内通知**: `送信先 = CONTACT_NOTIFY_TO` / `Reply-To = data.email` / `Subject = 【MF-AKADEMIA 新規問い合わせ】{会社名} / {お名前}`
+
+実装: `lib/mailer.ts` (テンプレ + Resend クライアント) / `app/api/contact/route.ts` (fan-out)。各送信は `Promise.allSettled` で独立。失敗しても他 2 ルートの成否に影響しない。API レスポンス `{ok:true, delivered:{chat, autoReply, notify}}`。
+
+### DNS 認証完了後の切替手順
+
+暫定は `onboarding@resend.dev` から送信。`m-and-f.jp` の DNS (SPF / DKIM / DMARC) 認証完了後:
+
+```bash
+vercel env rm RESEND_FROM_EMAIL production --yes
+echo "MF-AKADEMIA <noreply@m-and-f.jp>" | vercel env add RESEND_FROM_EMAIL production
+vercel --prod
+```
+
+コード変更は不要。Resend ダッシュボードでドメイン verified になってから切り替えること。
+
+### 環境変数設定の注意
+
+- `RESEND_API_KEY` などの秘密値は **必ず stdin 経由** (`echo "..." | vercel env add ...`) で Vercel に投入する
+- 秘密値をローカルファイル (`.env.local` / `CLAUDE.md` / コミットメッセージ / ターミナル履歴) に残さない
+- ローカル開発でメール送信を試す場合は `vercel env pull .env.local` で取得し、検証後に削除
+
+## 残タスク
+
+- 本番ドメイン接続 (`akademia.m-and-f.jp` など): 決まり次第 `NEXT_PUBLIC_SITE_URL` を更新
+- `m-and-f.jp` の DNS 認証完了後、`RESEND_FROM_EMAIL` を `noreply@m-and-f.jp` に切替
+- OG 画像 / favicon の正式デザイン差し替え (暫定は `scripts/generate-brand-images.ts` で自動生成中)
+- プライバシーポリシー / 特定商取引法表記の本文 (販売開始前必須)
+- Google Analytics / Search Console / sitemap
+- レート制限のグローバル化 (公開後 2 週間で Upstash Redis 検討)
 
 ## 注意
 

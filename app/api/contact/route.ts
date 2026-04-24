@@ -3,9 +3,11 @@ import {
   contactSchema,
   HEADCOUNT_OPTIONS,
   PLAN_OPTIONS,
+  type ContactInput,
 } from "@/lib/schemas/contact"
 import { checkRateLimit, clientKeyFromHeaders } from "@/lib/rate-limit"
 import { isAllowedOrigin } from "@/lib/allowed-origin"
+import { sendAutoReplyEmail, sendNotifyEmail } from "@/lib/mailer"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -46,11 +48,16 @@ export async function POST(req: Request) {
   const rl = checkRateLimit(key, 3)
   if (!rl.ok) {
     return NextResponse.json(
-      { ok: false, error: "リクエストが多すぎます。しばらく経ってから再度お試しください。" },
+      {
+        ok: false,
+        error: "リクエストが多すぎます。しばらく経ってから再度お試しください。",
+      },
       {
         status: 429,
         headers: {
-          "Retry-After": String(Math.max(1, Math.ceil((rl.resetAt - Date.now()) / 1000))),
+          "Retry-After": String(
+            Math.max(1, Math.ceil((rl.resetAt - Date.now()) / 1000)),
+          ),
         },
       },
     )
@@ -68,8 +75,6 @@ export async function POST(req: Request) {
 
   const parsed = contactSchema.safeParse(body)
   if (!parsed.success) {
-    // Always log full issues server-side for debugging; don't leak schema
-    // structure to clients in production.
     console.warn("[contact] validation failed:", parsed.error.issues)
     return NextResponse.json(
       isProd
@@ -84,21 +89,69 @@ export async function POST(req: Request) {
   }
 
   const data = parsed.data
+  const receivedAt = new Date()
 
   // Honeypot: if non-empty, pretend success silently.
   if (data.website && data.website.trim() !== "") {
     console.warn("[contact] honeypot triggered from", key)
-    return NextResponse.json({ ok: true, delivered: false })
+    return NextResponse.json({
+      ok: true,
+      delivered: { chat: false, autoReply: false, notify: false },
+    })
   }
 
-  const receivedAt = new Date().toISOString()
+  // Fan out: Google Chat + auto-reply email + notify email in parallel.
+  // Each leg reports its own success/failure; a single failed leg never blocks
+  // the others or changes the user-facing response code.
+  const [chatResult, autoReplyResult, notifyResult] = await Promise.allSettled([
+    sendChatNotification(data, receivedAt),
+    sendAutoReplyEmail(data),
+    sendNotifyEmail(data, receivedAt),
+  ])
+
+  const delivered = {
+    chat: settledOk(chatResult, "chat"),
+    autoReply: settledOk(autoReplyResult, "autoReply"),
+    notify: settledOk(notifyResult, "notify"),
+  }
+
+  return NextResponse.json({ ok: true, delivered })
+}
+
+function settledOk(
+  result: PromiseSettledResult<boolean>,
+  label: string,
+): boolean {
+  if (result.status === "fulfilled") return result.value
+  console.warn(`[contact] ${label} leg rejected:`, result.reason)
+  return false
+}
+
+async function sendChatNotification(
+  data: ContactInput,
+  receivedAt: Date,
+): Promise<boolean> {
+  const webhookUrl = process.env.GOOGLE_CHAT_WEBHOOK_URL
+  if (!webhookUrl) {
+    console.warn(
+      "[contact] GOOGLE_CHAT_WEBHOOK_URL is not configured — skipping chat",
+    )
+    if (!isProd) {
+      console.log(
+        "[contact] received (no webhook):",
+        JSON.stringify({ receivedAt: receivedAt.toISOString(), data }),
+      )
+    }
+    return false
+  }
+
   const headcountLabel = labelFor(HEADCOUNT_OPTIONS, data.headcount)
   const planLabel = labelFor(PLAN_OPTIONS, data.plan)
 
   const card = {
     cardsV2: [
       {
-        cardId: `mf-akademia-contact-${Date.now()}`,
+        cardId: `mf-akademia-contact-${receivedAt.getTime()}`,
         card: {
           header: {
             title: "🎓 MF-AKADEMIA 新規お問い合わせ",
@@ -108,9 +161,27 @@ export async function POST(req: Request) {
             {
               header: "基本情報",
               widgets: [
-                { decoratedText: { topLabel: "会社名", text: data.company, wrapText: true } },
-                { decoratedText: { topLabel: "お名前", text: data.name, wrapText: true } },
-                { decoratedText: { topLabel: "メール", text: data.email, wrapText: true } },
+                {
+                  decoratedText: {
+                    topLabel: "会社名",
+                    text: data.company,
+                    wrapText: true,
+                  },
+                },
+                {
+                  decoratedText: {
+                    topLabel: "お名前",
+                    text: data.name,
+                    wrapText: true,
+                  },
+                },
+                {
+                  decoratedText: {
+                    topLabel: "メール",
+                    text: data.email,
+                    wrapText: true,
+                  },
+                },
                 ...(data.phone
                   ? [{ decoratedText: { topLabel: "電話番号", text: data.phone } }]
                   : []),
@@ -137,23 +208,19 @@ export async function POST(req: Request) {
             },
             {
               header: "受信日時",
-              widgets: [{ decoratedText: { topLabel: "ISO", text: receivedAt } }],
+              widgets: [
+                {
+                  decoratedText: {
+                    topLabel: "ISO",
+                    text: receivedAt.toISOString(),
+                  },
+                },
+              ],
             },
           ] satisfies ChatCardSection[],
         },
       },
     ],
-  }
-
-  const webhookUrl = process.env.GOOGLE_CHAT_WEBHOOK_URL
-  if (!webhookUrl) {
-    console.warn(
-      "[contact] GOOGLE_CHAT_WEBHOOK_URL is not configured — accepting submission but not delivering.",
-    )
-    if (!isProd) {
-      console.log("[contact] received (no webhook):", JSON.stringify({ receivedAt, data }))
-    }
-    return NextResponse.json({ ok: true, delivered: false })
   }
 
   try {
@@ -165,18 +232,16 @@ export async function POST(req: Request) {
     })
     if (!res.ok) {
       const text = await res.text().catch(() => "")
-      // Truncate in case the upstream error echoes the webhook URL back.
       console.error(
         `[contact] Google Chat webhook returned ${res.status}: ${text.slice(0, 200)}`,
       )
-      return NextResponse.json({ ok: true, delivered: false })
+      return false
     }
+    return true
   } catch (err) {
     console.error("[contact] Google Chat webhook request failed:", err)
-    return NextResponse.json({ ok: true, delivered: false })
+    return false
   }
-
-  return NextResponse.json({ ok: true, delivered: true })
 }
 
 /**

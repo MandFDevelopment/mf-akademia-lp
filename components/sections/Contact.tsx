@@ -101,7 +101,7 @@ export function Contact() {
       const body = (await res.json().catch(() => ({}))) as {
         ok?: boolean
         error?: string
-        delivered?: boolean
+        delivered?: { chat?: boolean; autoReply?: boolean; notify?: boolean }
       }
       if (!res.ok || body.ok === false) {
         const msg = body.error ?? `送信に失敗しました (HTTP ${res.status})`
