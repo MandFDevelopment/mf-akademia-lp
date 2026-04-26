@@ -1,7 +1,37 @@
+"use client"
+
+import { useEffect, useRef } from "react"
 import { Check, Star } from "lucide-react"
-import { PLANS, formatWan, grantPerPerson } from "@/lib/pricing"
+import { PLANS, formatWan, grantPerPerson, type PlanId } from "@/lib/pricing"
 import { Button } from "@/components/ui/button"
+import { trackEvent } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
+
+function usePricingTierView(planId: PlanId) {
+  const ref = useRef<HTMLLIElement | null>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    if (typeof IntersectionObserver === "undefined") return
+    let fired = false
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting && !fired) {
+            fired = true
+            trackEvent("pricing_tier_view", { plan: planId })
+            observer.disconnect()
+            break
+          }
+        }
+      },
+      { threshold: 0.5 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [planId])
+  return ref
+}
 
 export function Pricing() {
   return (
@@ -31,144 +61,9 @@ export function Pricing() {
         </div>
 
         <ul className="mt-14 grid gap-6 md:grid-cols-3">
-          {PLANS.map((plan) => {
-            const perPersonGrant = grantPerPerson(plan.price)
-            const netPerPerson = plan.price - perPersonGrant
-            return (
-              <li key={plan.id}>
-                <article
-                  className={cn(
-                    "relative flex h-full flex-col rounded-2xl border p-7 transition-shadow",
-                    plan.featured
-                      ? "border-primary bg-primary text-primary-foreground shadow-lg"
-                      : "border-border bg-background text-foreground",
-                  )}
-                >
-                  {plan.featured && (
-                    <span className="absolute -top-3 right-6 inline-flex items-center gap-1 rounded-full bg-brand-amber px-3 py-1 text-xs font-semibold text-primary">
-                      <Star className="size-3" aria-hidden />
-                      人気
-                    </span>
-                  )}
-
-                  <h3
-                    className={cn(
-                      "text-lg font-semibold",
-                      plan.featured ? "text-primary-foreground" : "text-primary",
-                    )}
-                  >
-                    {plan.name}
-                  </h3>
-                  <p
-                    className={cn(
-                      "mt-1 text-sm leading-relaxed",
-                      plan.featured ? "text-white/75" : "text-muted-foreground",
-                    )}
-                  >
-                    {plan.description}
-                  </p>
-
-                  <div className="mt-6">
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold tracking-tight sm:text-4xl">
-                        {formatWan(plan.price)}
-                      </span>
-                      <span
-                        className={cn(
-                          "text-sm",
-                          plan.featured ? "text-white/70" : "text-muted-foreground",
-                        )}
-                      >
-                        / 人 (税別)
-                      </span>
-                    </div>
-                    <p
-                      className={cn(
-                        "mt-2 text-sm",
-                        plan.featured ? "text-brand-amber" : "text-primary",
-                      )}
-                    >
-                      助成金後 <span className="font-semibold">{formatWan(netPerPerson)}</span>
-                      <span
-                        className={cn(
-                          "ml-1 text-xs",
-                          plan.featured ? "text-white/60" : "text-muted-foreground",
-                        )}
-                      >
-                        / 人
-                      </span>
-                    </p>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "mt-6 grid grid-cols-2 gap-3 rounded-lg px-4 py-3 text-sm",
-                      plan.featured ? "bg-white/10" : "bg-secondary",
-                    )}
-                  >
-                    <div>
-                      <div
-                        className={cn(
-                          "text-xs",
-                          plan.featured ? "text-white/60" : "text-muted-foreground",
-                        )}
-                      >
-                        トラック数
-                      </div>
-                      <div className="font-semibold">{plan.tracks} トラック</div>
-                    </div>
-                    <div>
-                      <div
-                        className={cn(
-                          "text-xs",
-                          plan.featured ? "text-white/60" : "text-muted-foreground",
-                        )}
-                      >
-                        総尺
-                      </div>
-                      <div className="font-semibold">{plan.hours} 時間</div>
-                    </div>
-                  </div>
-
-                  <ul className="mt-6 space-y-3 text-sm">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <Check
-                          className={cn(
-                            "mt-0.5 size-4 shrink-0",
-                            plan.featured ? "text-brand-amber" : "text-primary",
-                          )}
-                          aria-hidden
-                        />
-                        <span
-                          className={cn(
-                            plan.featured ? "text-white/90" : "text-foreground",
-                          )}
-                        >
-                          {f}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-8 pt-2">
-                    <Button
-                      nativeButton={false}
-                      render={<a href="#simulator" />}
-                      className={cn(
-                        "w-full",
-                        plan.featured
-                          ? "bg-brand-amber text-primary hover:bg-brand-amber/90"
-                          : "bg-primary text-primary-foreground hover:bg-primary/90",
-                      )}
-                    >
-                      このプランで試算する
-                    </Button>
-                  </div>
-                </article>
-              </li>
-            )
-          })}
+          {PLANS.map((plan) => (
+            <PricingCard key={plan.id} plan={plan} />
+          ))}
         </ul>
 
         <p className="mx-auto mt-10 max-w-3xl text-center text-xs leading-relaxed text-muted-foreground">
@@ -176,5 +71,156 @@ export function Pricing() {
         </p>
       </div>
     </section>
+  )
+}
+
+function PricingCard({ plan }: { plan: (typeof PLANS)[number] }) {
+  const ref = usePricingTierView(plan.id)
+  const perPersonGrant = grantPerPerson(plan.price)
+  const netPerPerson = plan.price - perPersonGrant
+  return (
+    <li ref={ref}>
+      <article
+        className={cn(
+          "relative flex h-full flex-col rounded-2xl border p-7 transition-shadow",
+          plan.featured
+            ? "border-primary bg-primary text-primary-foreground shadow-lg"
+            : "border-border bg-background text-foreground",
+        )}
+      >
+        {plan.featured && (
+          <span className="absolute -top-3 right-6 inline-flex items-center gap-1 rounded-full bg-brand-amber px-3 py-1 text-xs font-semibold text-primary">
+            <Star className="size-3" aria-hidden />
+            人気
+          </span>
+        )}
+
+        <h3
+          className={cn(
+            "text-lg font-semibold",
+            plan.featured ? "text-primary-foreground" : "text-primary",
+          )}
+        >
+          {plan.name}
+        </h3>
+        <p
+          className={cn(
+            "mt-1 text-sm leading-relaxed",
+            plan.featured ? "text-white/75" : "text-muted-foreground",
+          )}
+        >
+          {plan.description}
+        </p>
+
+        <div className="mt-6">
+          <div className="flex items-baseline gap-1">
+            <span className="text-3xl font-bold tracking-tight sm:text-4xl">
+              {formatWan(plan.price)}
+            </span>
+            <span
+              className={cn(
+                "text-sm",
+                plan.featured ? "text-white/70" : "text-muted-foreground",
+              )}
+            >
+              / 人 (税別)
+            </span>
+          </div>
+          <p
+            className={cn(
+              "mt-2 text-sm",
+              plan.featured ? "text-brand-amber" : "text-primary",
+            )}
+          >
+            助成金後 <span className="font-semibold">{formatWan(netPerPerson)}</span>
+            <span
+              className={cn(
+                "ml-1 text-xs",
+                plan.featured ? "text-white/60" : "text-muted-foreground",
+              )}
+            >
+              / 人
+            </span>
+          </p>
+        </div>
+
+        <div
+          className={cn(
+            "mt-6 grid grid-cols-2 gap-3 rounded-lg px-4 py-3 text-sm",
+            plan.featured ? "bg-white/10" : "bg-secondary",
+          )}
+        >
+          <div>
+            <div
+              className={cn(
+                "text-xs",
+                plan.featured ? "text-white/60" : "text-muted-foreground",
+              )}
+            >
+              トラック数
+            </div>
+            <div className="font-semibold">{plan.tracks} トラック</div>
+          </div>
+          <div>
+            <div
+              className={cn(
+                "text-xs",
+                plan.featured ? "text-white/60" : "text-muted-foreground",
+              )}
+            >
+              総尺
+            </div>
+            <div className="font-semibold">{plan.hours} 時間</div>
+          </div>
+        </div>
+
+        <ul className="mt-6 space-y-3 text-sm">
+          {plan.features.map((f) => (
+            <li key={f} className="flex items-start gap-2">
+              <Check
+                className={cn(
+                  "mt-0.5 size-4 shrink-0",
+                  plan.featured ? "text-brand-amber" : "text-primary",
+                )}
+                aria-hidden
+              />
+              <span
+                className={cn(
+                  plan.featured ? "text-white/90" : "text-foreground",
+                )}
+              >
+                {f}
+              </span>
+            </li>
+          ))}
+        </ul>
+
+        <div className="mt-8 pt-2">
+          <Button
+            nativeButton={false}
+            render={
+              <a
+                href="#simulator"
+                onClick={() =>
+                  trackEvent("cta_click", {
+                    location: "pricing",
+                    label: "try_with_plan",
+                    plan: plan.id,
+                  })
+                }
+              />
+            }
+            className={cn(
+              "w-full",
+              plan.featured
+                ? "bg-brand-amber text-primary hover:bg-brand-amber/90"
+                : "bg-primary text-primary-foreground hover:bg-primary/90",
+            )}
+          >
+            このプランで試算する
+          </Button>
+        </div>
+      </article>
+    </li>
   )
 }

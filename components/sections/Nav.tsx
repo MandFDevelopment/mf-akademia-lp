@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { NAV_LINKS } from "@/lib/nav-links"
+import { trackEvent } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 
 export function Nav() {
@@ -62,7 +63,17 @@ export function Nav() {
               <Button
                 size="sm"
                 nativeButton={false}
-                render={<a href="#contact" />}
+                render={
+                  <a
+                    href="#contact"
+                    onClick={() =>
+                      trackEvent("cta_click", {
+                        location: "nav_desktop",
+                        label: "contact",
+                      })
+                    }
+                  />
+                }
                 className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 資料請求・お問い合わせ
@@ -107,7 +118,13 @@ export function Nav() {
                 render={
                   <a
                     href="#contact"
-                    onClick={() => setMobileOpen(false)}
+                    onClick={() => {
+                      trackEvent("cta_click", {
+                        location: "nav_mobile",
+                        label: "contact",
+                      })
+                      setMobileOpen(false)
+                    }}
                   />
                 }
                 className="mt-8 w-full bg-primary text-primary-foreground"

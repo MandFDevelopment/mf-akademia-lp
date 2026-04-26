@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ArrowDown, PlayCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { trackEvent } from "@/lib/analytics"
 
 const YOUTUBE_SAMPLE = "https://youtu.be/SWLxYLOg6Dg"
 
@@ -67,6 +68,12 @@ export function Hero() {
                 href={YOUTUBE_SAMPLE}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent("cta_click", {
+                    location: "hero",
+                    label: "sample_video",
+                  })
+                }
               />
             }
             className="bg-brand-amber text-primary hover:bg-brand-amber/90"
@@ -78,7 +85,17 @@ export function Hero() {
             size="lg"
             variant="outline"
             nativeButton={false}
-            render={<a href="#simulator" />}
+            render={
+              <a
+                href="#simulator"
+                onClick={() =>
+                  trackEvent("cta_click", {
+                    location: "hero",
+                    label: "simulator_jump",
+                  })
+                }
+              />
+            }
             className="border-white/30 bg-transparent text-primary-foreground hover:bg-white/10 hover:text-primary-foreground"
           >
             お見積もりを試算する

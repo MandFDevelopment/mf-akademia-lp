@@ -14,6 +14,7 @@ import {
   type PlanValue,
 } from "@/lib/schemas/contact"
 import { readSimulatorShare } from "@/lib/simulator-share"
+import { trackEvent } from "@/lib/analytics"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -107,6 +108,10 @@ export function Contact() {
         const msg = body.error ?? `送信に失敗しました (HTTP ${res.status})`
         throw new Error(msg)
       }
+      trackEvent("contact_form_submit", {
+        plan: data.plan,
+        headcount: data.headcount,
+      })
       setSubmitted(true)
       reset()
     } catch (err) {
@@ -200,6 +205,7 @@ export function Contact() {
             <Input
               id="company"
               autoComplete="organization"
+              data-clarity-mask="True"
               aria-invalid={!!errors.company}
               {...register("company")}
             />
@@ -210,6 +216,7 @@ export function Contact() {
               <Input
                 id="name"
                 autoComplete="name"
+                data-clarity-mask="True"
                 aria-invalid={!!errors.name}
                 {...register("name")}
               />
@@ -225,6 +232,7 @@ export function Contact() {
                 id="email"
                 type="email"
                 autoComplete="email"
+                data-clarity-mask="True"
                 aria-invalid={!!errors.email}
                 {...register("email")}
               />
@@ -237,6 +245,7 @@ export function Contact() {
               type="tel"
               autoComplete="tel"
               placeholder="(任意)"
+              data-clarity-mask="True"
               aria-invalid={!!errors.phone}
               {...register("phone")}
             />

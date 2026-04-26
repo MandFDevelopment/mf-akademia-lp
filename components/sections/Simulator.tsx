@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { Calculator, ArrowDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,6 +15,7 @@ import {
   type PlanId,
 } from "@/lib/pricing"
 import { writeSimulatorShare } from "@/lib/simulator-share"
+import { trackEvent } from "@/lib/analytics"
 
 const MIN_HEADCOUNT = 1
 const MAX_HEADCOUNT = 500
@@ -33,8 +34,32 @@ export function Simulator() {
   const plan = getPlan(planId)
   const quote = useMemo(() => calcQuote(plan, headcount), [plan, headcount])
 
+  // Debounced subsidy_calculator_used: emit at most once per 600 ms while the
+  // user changes plan or headcount. Skips the initial mount.
+  const isInitialMount = useRef(true)
+  useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+      return
+    }
+    const timer = window.setTimeout(() => {
+      trackEvent("subsidy_calculator_used", {
+        plan: planId,
+        headcount,
+        net_jpy: quote.net,
+      })
+    }, 600)
+    return () => window.clearTimeout(timer)
+  }, [planId, headcount, quote.net])
+
   const handleConsult = () => {
     writeSimulatorShare({ plan: planId, headcount })
+    trackEvent("cta_click", {
+      location: "simulator",
+      label: "consult_with_quote",
+      plan: planId,
+      headcount,
+    })
   }
 
   return (
