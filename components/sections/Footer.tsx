@@ -1,16 +1,31 @@
-import { NAV_LINKS } from "@/lib/nav-links"
+import Link from "next/link"
+
+const SERIES_LINKS = [
+  { href: "/", label: "シリーズトップ" },
+  { href: "/v1", label: "BIM × CAD × AI 編 (第1弾)" },
+  { href: "/v3", label: "AI × 生産設計 編 (第3弾)" },
+] as const
+
+const LEGAL_LINKS = [
+  { href: "/privacy", label: "プライバシーポリシー" },
+  { href: "/tokusho", label: "特定商取引法に基づく表記" },
+] as const
 
 export function Footer() {
   return (
     <footer className="border-t border-border bg-secondary">
       <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 md:grid-cols-3">
         <div>
-          <div className="flex items-center gap-2 text-lg font-bold text-primary">
+          <Link
+            href="/"
+            className="flex items-center gap-2 text-lg font-bold text-primary"
+            aria-label="MF-AKADEMIA シリーズトップへ"
+          >
             <span className="inline-block h-5 w-1 bg-brand-amber" aria-hidden />
             MF-AKADEMIA
-          </div>
+          </Link>
           <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-            建設業向け AI × BIM / CAD リスキリング研修動画シリーズ。
+            建設業向け AI リスキリング研修動画シリーズ。
           </p>
           <p className="mt-4 text-sm text-primary">
             提供:{" "}
@@ -25,19 +40,19 @@ export function Footer() {
           </p>
         </div>
 
-        <nav aria-label="フッターナビゲーション">
+        <nav aria-label="シリーズ">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            サイト内
+            シリーズ
           </h2>
           <ul className="mt-4 space-y-2 text-sm">
-            {NAV_LINKS.map((link) => (
+            {SERIES_LINKS.map((link) => (
               <li key={link.href}>
-                <a
+                <Link
                   href={link.href}
                   className="text-primary transition-colors hover:text-brand-amber"
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -48,22 +63,16 @@ export function Footer() {
             法務情報
           </h2>
           <ul className="mt-4 space-y-2 text-sm">
-            <li>
-              <a
-                href="/privacy"
-                className="text-primary transition-colors hover:text-brand-amber"
-              >
-                プライバシーポリシー
-              </a>
-            </li>
-            <li>
-              <a
-                href="/tokusho"
-                className="text-primary transition-colors hover:text-brand-amber"
-              >
-                特定商取引法に基づく表記
-              </a>
-            </li>
+            {LEGAL_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-primary transition-colors hover:text-brand-amber"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>
