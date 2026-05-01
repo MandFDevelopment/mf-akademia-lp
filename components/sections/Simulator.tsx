@@ -13,7 +13,7 @@ import {
   formatWan,
   getPlan,
   type PlanId,
-} from "@/lib/pricing"
+} from "@/lib/pricing/v1"
 import { writeSimulatorShare } from "@/lib/simulator-share"
 import { trackEvent } from "@/lib/analytics"
 
@@ -53,12 +53,13 @@ export function Simulator() {
   }, [planId, headcount, quote.net])
 
   const handleConsult = () => {
-    writeSimulatorShare({ plan: planId, headcount })
+    writeSimulatorShare({ plan: planId, headcount, series: "v1" })
     trackEvent("cta_click", {
       location: "simulator",
       label: "consult_with_quote",
       plan: planId,
       headcount,
+      series: "v1",
     })
   }
 
@@ -117,7 +118,7 @@ export function Simulator() {
                         </span>
                       </div>
                       <div className="mt-0.5 text-xs text-muted-foreground">
-                        {p.tracks} トラック / {p.hours} 時間
+                        {p.scaleLabel} / {p.hoursLabel}
                       </div>
                     </div>
                   </label>

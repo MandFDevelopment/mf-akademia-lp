@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { Check, Star } from "lucide-react"
-import { PLANS, formatWan, grantPerPerson, type PlanId } from "@/lib/pricing"
+import { PLANS, formatWan, grantPerPerson, type PlanId } from "@/lib/pricing/v1"
 import { Button } from "@/components/ui/button"
 import { trackEvent } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
@@ -157,9 +157,9 @@ function PricingCard({ plan }: { plan: (typeof PLANS)[number] }) {
                 plan.featured ? "text-white/60" : "text-muted-foreground",
               )}
             >
-              トラック数
+              構成
             </div>
-            <div className="font-semibold">{plan.tracks} トラック</div>
+            <div className="font-semibold">{plan.scaleLabel}</div>
           </div>
           <div>
             <div
@@ -170,7 +170,7 @@ function PricingCard({ plan }: { plan: (typeof PLANS)[number] }) {
             >
               総尺
             </div>
-            <div className="font-semibold">{plan.hours} 時間</div>
+            <div className="font-semibold">{plan.hoursLabel}</div>
           </div>
         </div>
 

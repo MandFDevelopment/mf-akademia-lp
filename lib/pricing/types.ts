@@ -8,61 +8,17 @@ export type Plan = {
   id: PlanId
   name: string
   price: number
-  tracks: number
-  hours: number
+  /** Display label for the structural scale (e.g. "3 トラック / 36 本", "Phase 1+2 / 96 セッション"). */
+  scaleLabel: string
+  /** Display label for total runtime (e.g. "11.4 時間", "約 21 時間"). */
+  hoursLabel: string
   description: string
   features: string[]
   featured?: boolean
 }
 
-export const PLANS: Plan[] = [
-  {
-    id: "Starter",
-    name: "Starter",
-    price: 480_000,
-    tracks: 3,
-    hours: 11.4,
-    description: "まずは特定の役割 / ツールに絞って導入したい方向け。",
-    features: [
-      "3 トラック 36 本 / 11.4 時間",
-      "単一ツール・単一役割を想定",
-      "計画申請サポート (無償)",
-    ],
-  },
-  {
-    id: "Standard",
-    name: "Standard",
-    price: 960_000,
-    tracks: 9,
-    hours: 34,
-    description: "複数の役割・ツールをまとめて底上げしたいチーム向け。",
-    features: [
-      "9 トラック 108 本 / 34 時間",
-      "複数役割 / 両ツール対応",
-      "計画申請サポート (無償)",
-      "受講履歴レポート",
-    ],
-    featured: true,
-  },
-  {
-    id: "Premium",
-    name: "Premium",
-    price: 1_020_000,
-    tracks: 18,
-    hours: 68,
-    description: "全社展開・BIM マネージャ育成まで視野に入れた方向け。",
-    features: [
-      "18 トラック 216 本 / 68 時間",
-      "全ツール・全役割カバー",
-      "計画申請サポート (無償)",
-      "受講履歴レポート",
-      "カスタム映像の追加制作 (別途見積)",
-    ],
-  },
-]
-
-export function getPlan(id: PlanId): Plan {
-  const plan = PLANS.find((p) => p.id === id)
+export function getPlanFrom(plans: readonly Plan[], id: PlanId): Plan {
+  const plan = plans.find((p) => p.id === id)
   if (!plan) throw new Error(`Unknown plan: ${id}`)
   return plan
 }
