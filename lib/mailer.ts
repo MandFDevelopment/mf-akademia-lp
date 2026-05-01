@@ -3,6 +3,7 @@ import type { ContactInput } from "@/lib/schemas/contact"
 import {
   HEADCOUNT_OPTIONS,
   PLAN_OPTIONS,
+  SERIES_OPTIONS,
 } from "@/lib/schemas/contact"
 
 /**
@@ -76,10 +77,13 @@ function formatJst(date: Date): string {
 export function buildAutoReplyEmail(data: ContactInput) {
   const headcountLabel = labelFor(HEADCOUNT_OPTIONS, data.headcount)
   const planLabel = labelFor(PLAN_OPTIONS, data.plan)
+  const seriesLabel = labelFor(SERIES_OPTIONS, data.series)
 
   const text = `${data.name} 様
 
-この度は MF-AKADEMIA (AI × BIM / CAD リスキリング研修) に
+対象: ${seriesLabel}
+
+この度は MF-AKADEMIA (建設業向け AI リスキリング研修シリーズ) に
 お問い合わせいただき、誠にありがとうございます。
 
 下記の内容でお問い合わせを承りました。
@@ -90,6 +94,7 @@ export function buildAutoReplyEmail(data: ContactInput) {
 ──────────────────────────────
 【お問い合わせ内容】
 
+対象シリーズ: ${seriesLabel}
 会社名: ${data.company}
 お名前: ${data.name}
 メール: ${data.email}
@@ -122,9 +127,11 @@ https://mf-akademia-lp.vercel.app
 export function buildNotifyEmail(data: ContactInput, receivedAt: Date) {
   const headcountLabel = labelFor(HEADCOUNT_OPTIONS, data.headcount)
   const planLabel = labelFor(PLAN_OPTIONS, data.plan)
+  const seriesLabel = labelFor(SERIES_OPTIONS, data.series)
 
   const text = `MF-AKADEMIA の LP から新規お問い合わせがありました。
 
+■ 対象シリーズ: ${seriesLabel}
 ■ 会社名: ${data.company}
 ■ 担当者: ${data.name}
 ■ 人数: ${headcountLabel}
@@ -145,10 +152,11 @@ ${data.message?.trim() ? data.message : "(記入なし)"}
 `
 
   // Any user-controlled value that will end up in an RFC 5322 header gets
-  // sanitized to reject CR/LF smuggling.
+  // sanitized to reject CR/LF smuggling. data.series is enum-validated by Zod
+  // before reaching this function; SERIES_OPTIONS labels are static text.
   return {
     subject: sanitizeHeader(
-      `【MF-AKADEMIA 新規問い合わせ】${data.company} / ${data.name}`,
+      `【MF-AKADEMIA / ${seriesLabel}】新規問い合わせ ${data.company} / ${data.name}`,
     ),
     text,
     replyTo: sanitizeHeader(data.email),
