@@ -13,9 +13,9 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://mf-akademia-lp.vercel.app";
-const title = "AI × BIM / CAD リスキリング研修 | 株式会社 M&F";
+const title = "MF-AKADEMIA | 建設業の AI リスキリング研修シリーズ";
 const description =
-  "建設業向け AI × BIM/CAD 研修動画 432 本。人材開発支援助成金 3/4 対応、1 人あたり実質負担 12 万円から。";
+  "建設業向け AI リスキリング研修シリーズ。BIM × CAD × AI 編 / AI × 生産設計 編。人材開発支援助成金 3/4 対応、1 人あたり実質負担 12 万円から。";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -24,8 +24,6 @@ export const metadata: Metadata = {
   applicationName: "MF-AKADEMIA",
   keywords: [
     "AI",
-    "BIM",
-    "CAD",
     "建設業",
     "リスキリング",
     "研修",
@@ -49,7 +47,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "MF-AKADEMIA — AI × BIM / CAD リスキリング研修",
+        alt: "MF-AKADEMIA — 建設業の AI リスキリング研修シリーズ",
       },
     ],
   },

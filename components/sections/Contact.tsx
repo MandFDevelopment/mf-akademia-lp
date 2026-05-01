@@ -8,12 +8,14 @@ import {
   contactSchema,
   HEADCOUNT_OPTIONS,
   PLAN_OPTIONS,
+  SERIES_OPTIONS,
   isPlanValue,
   type ContactInput,
   type HeadcountValue,
   type PlanValue,
+  type SeriesValue,
 } from "@/lib/schemas/contact"
-import { readSimulatorShare } from "@/lib/simulator-share"
+import { readSimulatorShare, type SeriesId } from "@/lib/simulator-share"
 import { trackEvent } from "@/lib/analytics"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -36,7 +38,13 @@ function headcountFromNumber(n: number): HeadcountValue {
   return "300+"
 }
 
-export function Contact() {
+export type ContactDefaultSeries = SeriesValue
+
+export function Contact({
+  defaultSeries = "undecided",
+}: {
+  defaultSeries?: ContactDefaultSeries
+} = {}) {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
@@ -49,6 +57,7 @@ export function Contact() {
       phone: "",
       headcount: "1-10",
       plan: "Undecided",
+      series: defaultSeries,
       message: "",
       consent: false,
       website: "",
@@ -65,9 +74,27 @@ export function Contact() {
   } = form
 
   // Apply the simulator handoff once on mount.
+  // Each series has its own sessionStorage key. Prefer the page's defaultSeries
+  // (so /v3 picks v3's last quote). On the series-top page (defaultSeries =
+  // "undecided" / "both"), fall back to whichever series has a stored quote.
   useEffect(() => {
-    const share = readSimulatorShare()
-    if (!share) return
+    const order: SeriesId[] =
+      defaultSeries === "v1"
+        ? ["v1", "v3"]
+        : defaultSeries === "v3"
+          ? ["v3", "v1"]
+          : ["v3", "v1"]
+    let share: ReturnType<typeof readSimulatorShare> = null
+    let shareSeries: SeriesId | null = null
+    for (const s of order) {
+      const candidate = readSimulatorShare(s)
+      if (candidate) {
+        share = candidate
+        shareSeries = s
+        break
+      }
+    }
+    if (!share || !shareSeries) return
     if (!isPlanValue(share.plan)) return
     if (
       !Number.isFinite(share.headcount) ||
@@ -80,15 +107,17 @@ export function Contact() {
     setValue("headcount", headcountFromNumber(share.headcount), {
       shouldDirty: false,
     })
+    setValue("series", shareSeries, { shouldDirty: false })
     setValue(
       "message",
       `シミュレーターで試算した ${share.plan} プラン / ${share.headcount} 名 の見積もりについて相談したいです。`,
       { shouldDirty: false },
     )
-  }, [setValue])
+  }, [setValue, defaultSeries])
 
   const planValue = watch("plan")
   const headcountValue = watch("headcount")
+  const seriesValue = watch("series")
   const consentValue = watch("consent")
 
   const onSubmit = handleSubmit(async (data) => {
@@ -111,6 +140,7 @@ export function Contact() {
       trackEvent("contact_form_submit", {
         plan: data.plan,
         headcount: data.headcount,
+        series: data.series,
       })
       setSubmitted(true)
       reset()
@@ -249,6 +279,33 @@ export function Contact() {
               aria-invalid={!!errors.phone}
               {...register("phone")}
             />
+          </Field>
+
+          <Field
+            id="series"
+            label="対象シリーズ"
+            required
+            error={errors.series?.message}
+          >
+            <Select
+              value={seriesValue}
+              onValueChange={(v) =>
+                setValue("series", v as SeriesValue, {
+                  shouldValidate: true,
+                })
+              }
+            >
+              <SelectTrigger id="series" aria-invalid={!!errors.series}>
+                <SelectValue placeholder="選択してください" />
+              </SelectTrigger>
+              <SelectContent>
+                {SERIES_OPTIONS.map((opt) => (
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </Field>
 
           <div className="grid gap-6 sm:grid-cols-2">

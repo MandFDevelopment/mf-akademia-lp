@@ -1,29 +1,25 @@
 import { Nav } from "@/components/sections/Nav"
-import { Hero } from "@/components/sections/Hero"
-import { Problem } from "@/components/sections/Problem"
-import { Solution } from "@/components/sections/Solution"
-import { Pricing } from "@/components/sections/Pricing"
-import { Simulator } from "@/components/sections/Simulator"
+import { SeriesHero } from "@/components/sections/top/SeriesHero"
+import { SeriesIntro } from "@/components/sections/top/SeriesIntro"
+import { SeriesLineup } from "@/components/sections/top/SeriesLineup"
 import { Grant } from "@/components/sections/Grant"
 import { Company } from "@/components/sections/Company"
-import { FAQ } from "@/components/sections/FAQ"
+import { SharedFAQ } from "@/components/sections/top/SharedFAQ"
 import { Contact } from "@/components/sections/Contact"
 import { Footer } from "@/components/sections/Footer"
 
 export default function Home() {
   return (
     <>
-      <Nav />
+      <Nav mode="top" />
       <main>
-        <Hero />
-        <Problem />
-        <Solution />
-        <Pricing />
-        <Simulator />
+        <SeriesHero />
+        <SeriesIntro />
+        <SeriesLineup />
         <Grant />
         <Company />
-        <FAQ />
-        <Contact />
+        <SharedFAQ />
+        <Contact defaultSeries="undecided" />
       </main>
       <Footer />
     </>

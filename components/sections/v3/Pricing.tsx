@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { Check, Star } from "lucide-react"
-import { PLANS, formatWan, grantPerPerson, type PlanId } from "@/lib/pricing/v1"
+import { PLANS, formatWan, grantPerPerson, type PlanId } from "@/lib/pricing/v3"
 import { Button } from "@/components/ui/button"
 import { trackEvent } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
@@ -19,7 +19,7 @@ function usePricingTierView(planId: PlanId) {
         for (const entry of entries) {
           if (entry.isIntersecting && !fired) {
             fired = true
-            trackEvent("pricing_tier_view", { plan: planId })
+            trackEvent("pricing_tier_view", { plan: planId, series: "v3" })
             observer.disconnect()
             break
           }
@@ -37,7 +37,7 @@ export function Pricing() {
   return (
     <section
       id="pricing"
-      aria-labelledby="pricing-heading"
+      aria-labelledby="pricing-heading-v3"
       className="bg-background py-20 sm:py-24"
     >
       <div className="mx-auto max-w-6xl px-6">
@@ -46,7 +46,7 @@ export function Pricing() {
             Pricing
           </p>
           <h2
-            id="pricing-heading"
+            id="pricing-heading-v3"
             className="mt-3 text-3xl font-bold tracking-tight text-primary sm:text-4xl"
           >
             料金プラン
@@ -57,6 +57,9 @@ export function Pricing() {
               1 人あたり実質 12 万円〜
             </span>
             。
+          </p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            ※ 第3弾 (AI × 生産設計 編) の価格・構成は仮値です。確定後に差し替えます。
           </p>
         </div>
 
@@ -206,6 +209,7 @@ function PricingCard({ plan }: { plan: (typeof PLANS)[number] }) {
                     location: "pricing",
                     label: "try_with_plan",
                     plan: plan.id,
+                    series: "v3",
                   })
                 }
               />

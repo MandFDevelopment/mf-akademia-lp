@@ -13,7 +13,7 @@ import {
   formatWan,
   getPlan,
   type PlanId,
-} from "@/lib/pricing/v1"
+} from "@/lib/pricing/v3"
 import { writeSimulatorShare } from "@/lib/simulator-share"
 import { trackEvent } from "@/lib/analytics"
 
@@ -34,8 +34,6 @@ export function Simulator() {
   const plan = getPlan(planId)
   const quote = useMemo(() => calcQuote(plan, headcount), [plan, headcount])
 
-  // Debounced subsidy_calculator_used: emit at most once per 600 ms while the
-  // user changes plan or headcount. Skips the initial mount.
   const isInitialMount = useRef(true)
   useEffect(() => {
     if (isInitialMount.current) {
@@ -47,26 +45,27 @@ export function Simulator() {
         plan: planId,
         headcount,
         net_jpy: quote.net,
+        series: "v3",
       })
     }, 600)
     return () => window.clearTimeout(timer)
   }, [planId, headcount, quote.net])
 
   const handleConsult = () => {
-    writeSimulatorShare({ plan: planId, headcount, series: "v1" })
+    writeSimulatorShare({ plan: planId, headcount, series: "v3" })
     trackEvent("cta_click", {
       location: "simulator",
       label: "consult_with_quote",
       plan: planId,
       headcount,
-      series: "v1",
+      series: "v3",
     })
   }
 
   return (
     <section
       id="simulator"
-      aria-labelledby="simulator-heading"
+      aria-labelledby="simulator-heading-v3"
       className="bg-secondary py-20 sm:py-24"
     >
       <div className="mx-auto max-w-5xl px-6">
@@ -75,7 +74,7 @@ export function Simulator() {
             Simulator
           </p>
           <h2
-            id="simulator-heading"
+            id="simulator-heading-v3"
             className="mt-3 text-3xl font-bold tracking-tight text-primary sm:text-4xl"
           >
             お見積もり試算
@@ -88,7 +87,6 @@ export function Simulator() {
         </div>
 
         <div className="mt-12 grid gap-6 rounded-2xl border border-border bg-background p-6 sm:p-8 lg:grid-cols-[1fr_1.1fr]">
-          {/* Inputs */}
           <div className="space-y-8">
             <div>
               <Label className="text-sm font-semibold text-primary">
@@ -102,12 +100,12 @@ export function Simulator() {
                 {PLANS.map((p) => (
                   <label
                     key={p.id}
-                    htmlFor={`sim-${p.id}`}
+                    htmlFor={`sim-v3-${p.id}`}
                     className="flex cursor-pointer items-start gap-3 rounded-lg border border-border bg-background px-4 py-3 transition-colors hover:border-primary has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5"
                   >
                     <RadioGroupItem
                       value={p.id}
-                      id={`sim-${p.id}`}
+                      id={`sim-v3-${p.id}`}
                       className="mt-1"
                     />
                     <div className="flex-1">
@@ -128,14 +126,14 @@ export function Simulator() {
 
             <div>
               <Label
-                htmlFor="sim-headcount"
+                htmlFor="sim-v3-headcount"
                 className="text-sm font-semibold text-primary"
               >
                 受講人数 ({MIN_HEADCOUNT}〜{MAX_HEADCOUNT})
               </Label>
               <div className="mt-3 flex items-center gap-3">
                 <Input
-                  id="sim-headcount"
+                  id="sim-v3-headcount"
                   type="number"
                   inputMode="numeric"
                   min={MIN_HEADCOUNT}
@@ -150,7 +148,6 @@ export function Simulator() {
             </div>
           </div>
 
-          {/* Output */}
           <div className="flex flex-col justify-between rounded-xl bg-primary p-6 text-primary-foreground sm:p-7">
             <div className="space-y-5">
               <div className="flex items-center gap-2 text-sm text-white/70">

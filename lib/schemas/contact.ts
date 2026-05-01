@@ -15,8 +15,11 @@ export const PLAN_VALUES = [
   "Undecided",
 ] as const
 
+export const SERIES_VALUES = ["v1", "v3", "both", "undecided"] as const
+
 export type HeadcountValue = (typeof HEADCOUNT_VALUES)[number]
 export type PlanValue = (typeof PLAN_VALUES)[number]
+export type SeriesValue = (typeof SERIES_VALUES)[number]
 
 type Option<V extends string> = { value: V; label: string }
 
@@ -35,6 +38,13 @@ export const PLAN_OPTIONS: ReadonlyArray<Option<PlanValue>> = [
   { value: "Undecided", label: "未定・相談したい" },
 ]
 
+export const SERIES_OPTIONS: ReadonlyArray<Option<SeriesValue>> = [
+  { value: "v1", label: "BIM × CAD × AI 編 (第1弾)" },
+  { value: "v3", label: "AI × 生産設計 編 (第3弾)" },
+  { value: "both", label: "両方検討" },
+  { value: "undecided", label: "未定 / 相談したい" },
+]
+
 export function isPlanValue(v: unknown): v is PlanValue {
   return typeof v === "string" && (PLAN_VALUES as readonly string[]).includes(v)
 }
@@ -43,6 +53,12 @@ export function isHeadcountValue(v: unknown): v is HeadcountValue {
   return (
     typeof v === "string" &&
     (HEADCOUNT_VALUES as readonly string[]).includes(v)
+  )
+}
+
+export function isSeriesValue(v: unknown): v is SeriesValue {
+  return (
+    typeof v === "string" && (SERIES_VALUES as readonly string[]).includes(v)
   )
 }
 
@@ -73,6 +89,9 @@ export const contactSchema = z.object({
     message: "受講予定人数を選択してください",
   }),
   plan: z.enum(PLAN_VALUES, { message: "関心のあるプランを選択してください" }),
+  series: z.enum(SERIES_VALUES, {
+    message: "対象シリーズを選択してください",
+  }),
   message: z
     .string()
     .trim()

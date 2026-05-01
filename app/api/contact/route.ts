@@ -3,6 +3,7 @@ import {
   contactSchema,
   HEADCOUNT_OPTIONS,
   PLAN_OPTIONS,
+  SERIES_OPTIONS,
   type ContactInput,
 } from "@/lib/schemas/contact"
 import { checkRateLimit, clientKeyFromHeaders } from "@/lib/rate-limit"
@@ -147,6 +148,7 @@ async function sendChatNotification(
 
   const headcountLabel = labelFor(HEADCOUNT_OPTIONS, data.headcount)
   const planLabel = labelFor(PLAN_OPTIONS, data.plan)
+  const seriesLabel = labelFor(SERIES_OPTIONS, data.series)
 
   const card = {
     cardsV2: [
@@ -154,13 +156,20 @@ async function sendChatNotification(
         cardId: `mf-akademia-contact-${receivedAt.getTime()}`,
         card: {
           header: {
-            title: "🎓 MF-AKADEMIA 新規お問い合わせ",
+            title: `🎓 MF-AKADEMIA 新規お問い合わせ (${seriesLabel})`,
             subtitle: data.company,
           },
           sections: [
             {
               header: "基本情報",
               widgets: [
+                {
+                  decoratedText: {
+                    topLabel: "対象シリーズ",
+                    text: seriesLabel,
+                    wrapText: true,
+                  },
+                },
                 {
                   decoratedText: {
                     topLabel: "会社名",

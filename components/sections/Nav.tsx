@@ -12,11 +12,19 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
-import { NAV_LINKS } from "@/lib/nav-links"
+import { getNavLinks, type NavMode } from "@/lib/nav-links"
 import { trackEvent } from "@/lib/analytics"
 import { cn } from "@/lib/utils"
 
-export function Nav() {
+export type NavProps = {
+  /**
+   * `top` for the series-top page (`/`), `detail` for product pages
+   * (`/v1`, `/v3`). Defaults to `detail` for backward compatibility.
+   */
+  mode?: NavMode
+}
+
+export function Nav({ mode = "detail" }: NavProps = {}) {
   const { scrollY } = useScroll()
   const height = useTransform(scrollY, [0, 120], [80, 60])
   const [scrolled, setScrolled] = useState(false)
@@ -26,6 +34,8 @@ export function Nav() {
     const unsubscribe = scrollY.on("change", (v) => setScrolled(v > 40))
     return () => unsubscribe()
   }, [scrollY])
+
+  const navLinks = getNavLinks(mode)
 
   return (
     <motion.header
@@ -39,9 +49,9 @@ export function Nav() {
     >
       <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-6">
         <Link
-          href="#top"
+          href="/"
           className="flex items-center gap-2 text-lg font-bold tracking-tight text-primary sm:text-xl"
-          aria-label="MF-AKADEMIA トップへ"
+          aria-label="MF-AKADEMIA シリーズトップへ"
         >
           <span className="inline-block h-6 w-1 bg-brand-amber" aria-hidden />
           MF-AKADEMIA
@@ -49,7 +59,7 @@ export function Nav() {
 
         <nav aria-label="メインナビゲーション" className="hidden md:block">
           <ul className="flex items-center gap-7 text-sm font-medium text-muted-foreground">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <li key={link.href}>
                 <a
                   href={link.href}
@@ -101,7 +111,18 @@ export function Nav() {
             </SheetHeader>
             <nav aria-label="モバイルナビゲーション" className="mt-6 px-4">
               <ul className="space-y-4 text-base font-medium">
-                {NAV_LINKS.map((link) => (
+                {mode === "detail" && (
+                  <li>
+                    <Link
+                      href="/"
+                      onClick={() => setMobileOpen(false)}
+                      className="block border-b border-border py-2 text-foreground hover:text-primary"
+                    >
+                      ← シリーズトップへ
+                    </Link>
+                  </li>
+                )}
+                {navLinks.map((link) => (
                   <li key={link.href}>
                     <a
                       href={link.href}

@@ -2,21 +2,33 @@
 
 # MF-AKADEMIA LP
 
-AI × BIM / CAD リスキリング研修動画 432 本の販売ランディングページ。
+建設業向け AI × BIM / CAD リスキリング研修動画の販売ランディングページ (シリーズ複数展開)。
 
 ## 販売主体・商品情報
 
 - **販売主体**: 株式会社 M&F (Ltd.) — 「M&F tecnica」ではないので注意
-- **商品**: AI × BIM / CAD 研修動画 432 本 (収録済み実体は `../../_video/`, `../../AI_BIM_CAD研修動画_432本/` にある)
+- **商品**: 建設業向けリスキリング研修動画シリーズ (第1弾・第3弾を並列販売)
+  - 第1弾 BIM × CAD × AI 編: 432 本 / 136 時間 / 36 トラック (収録済み実体は `../../_video/`, `../../AI_BIM_CAD研修動画_432本/`)
+  - 第3弾 AI × 生産設計 編: 約 290 本 / 約 65 時間 / 6 Phase 構成 (仮値、Maako 確定待ち)
 - **対象**: 建設業 (ゼネコン、設計事務所、BIM/CAD オペレータの育成部門 など)
+
+### ページ構成
+
+| パス | 内容 |
+| --- | --- |
+| `/` | シリーズトップ (BIM 25年実績 + 2カードラインナップ + 共通 Grant/Company/FAQ/Contact) |
+| `/v1` | 第1弾 BIM × CAD × AI 編 詳細ページ |
+| `/v3` | 第3弾 AI × 生産設計 編 詳細ページ |
 
 ### プラン
 
-| プラン | 価格 (税別) | 対象人数 / 内容 |
-| --- | --- | --- |
-| Starter | 48 万円 | 小規模 (3 トラック / 11.4 時間) |
-| Standard | 96 万円 | 標準 (9 トラック / 34 時間) |
-| Premium | 102 万円 | フル (18 トラック / 68 時間) |
+第1弾・第3弾とも同額構造。第3弾の `scaleLabel` / `hoursLabel` は仮値 (Maako 確定後に `lib/pricing/v3.ts` を更新)。
+
+| プラン | 価格 (税別) | 第1弾 規模感 | 第3弾 規模感 (仮) |
+| --- | --- | --- | --- |
+| Starter | 48 万円 | 3 トラック / 11.4 時間 | 2 Phase / 約 20 時間 |
+| Standard | 96 万円 | 9 トラック / 34 時間 | 4 Phase / 約 45 時間 |
+| Premium | 102 万円 | 18 トラック / 68 時間 | 6 Phase / 約 65 時間 |
 
 助成金後の 1 人あたり実質負担 (中小企業 3/4 + 上限 72 万円適用):
 - Starter: 12 万円
@@ -101,7 +113,7 @@ vercel              # Preview デプロイ
 
 問い合わせフォーム送信時に、Google Chat 通知と並行して 2 通送信:
 - **お客様への自動返信**: `送信先 = data.email` / `Subject = 【MF-AKADEMIA】お問い合わせありがとうございます` / プレーンテキスト
-- **社内通知**: `送信先 = CONTACT_NOTIFY_TO` / `Reply-To = data.email` / `Subject = 【MF-AKADEMIA 新規問い合わせ】{会社名} / {お名前}`
+- **社内通知**: `送信先 = CONTACT_NOTIFY_TO` / `Reply-To = data.email` / `Subject = 【MF-AKADEMIA / {シリーズ名}】新規問い合わせ {会社名} / {お名前}`
 
 実装: `lib/mailer.ts` (テンプレ + Resend クライアント) / `app/api/contact/route.ts` (fan-out)。各送信は `Promise.allSettled` で独立。失敗しても他 2 ルートの成否に影響しない。API レスポンス `{ok:true, delivered:{chat, autoReply, notify}}`。
 
@@ -129,11 +141,14 @@ vercel --prod
 - `m-and-f.jp` の DNS 認証完了後、`RESEND_FROM_EMAIL` を `noreply@m-and-f.jp` に切替
 - OG 画像 / favicon の正式デザイン差し替え (暫定は `scripts/generate-brand-images.ts` で自動生成中)
 - プライバシーポリシー / 特定商取引法表記の本文 (販売開始前必須)
-- Google Analytics / Search Console / sitemap
+- sitemap / Search Console 登録
 - レート制限のグローバル化 (公開後 2 週間で Upstash Redis 検討)
+- 第3弾 (v3) の価格・構成・Phase 数は仮値。Maako 確定後に `lib/pricing/v3.ts` を更新し再デプロイ
+- `/v3` 専用 OG 画像の正式デザイン作成
 
 ## 注意
 
 - `tailwind.config.ts` を手動で書かない (Tailwind v4 は `globals.css` の `@theme` 管理)
 - shadcn のスタイルは **base-nova**。`components.json` を書き換えない
 - 販売主体の表記は必ず **「株式会社 M&F」**
+- `Plan` 型は `scaleLabel: string` + `hoursLabel: string` を使う (v1 はトラック単位、v3 は Phase 単位で表示文字列が異なるため数値フィールドは持たない)
