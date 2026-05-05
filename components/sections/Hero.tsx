@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ArrowDown, PlayCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { TierCTAButtons } from "@/components/sections/shared/TierCTAButtons"
 import { trackEvent } from "@/lib/analytics"
 
 const YOUTUBE_SAMPLE = "https://youtu.be/SWLxYLOg6Dg"
@@ -57,8 +58,17 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-10"
+        >
+          <TierCTAButtons pageId="v1" />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
+          className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center"
         >
           <Button
             size="lg"
