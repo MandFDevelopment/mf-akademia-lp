@@ -1,6 +1,6 @@
 "use client"
 
-import { FileSpreadsheet, FileText } from "lucide-react"
+import { Compass, FileSpreadsheet } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { trackEvent } from "@/lib/analytics"
 
@@ -13,10 +13,10 @@ type TierCTAButtonsProps = {
 const TIERS = [
   {
     tier: "executive" as const,
-    href: "#contact",
+    href: "/resources/diagnosis",
     label: "経営者・決裁者の方へ",
-    sub: "ROI試算書を無料DL",
-    Icon: FileText,
+    sub: "次世代建設業 移行診断(無料・3分)",
+    Icon: Compass,
   },
   {
     tier: "manager" as const,
