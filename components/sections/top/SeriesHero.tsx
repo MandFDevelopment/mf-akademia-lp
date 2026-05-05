@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ArrowDown, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { TierCTAButtons } from "@/components/sections/shared/TierCTAButtons"
 import { trackEvent } from "@/lib/analytics"
 
 const BADGES = [
@@ -34,9 +35,9 @@ export function SeriesHero() {
         </motion.p>
 
         <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-          建設業の AI 活用を、
+          設計図の読解で止まる現場を、
           <br className="hidden sm:inline" />
-          <span className="text-brand-amber">体系的に</span>学ぶ。
+          <span className="text-brand-amber">なくす。</span>
         </h1>
 
         <motion.p
@@ -55,8 +56,17 @@ export function SeriesHero() {
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-10"
+        >
+          <TierCTAButtons pageId="top" />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
+          className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center"
         >
           <Button
             size="lg"

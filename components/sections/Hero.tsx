@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import { ArrowDown, PlayCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { TierCTAButtons } from "@/components/sections/shared/TierCTAButtons"
 import { trackEvent } from "@/lib/analytics"
 
 const YOUTUBE_SAMPLE = "https://youtu.be/SWLxYLOg6Dg"
@@ -38,9 +39,9 @@ export function Hero() {
 
         {/* LCP element — render immediately (no initial opacity:0) so LCP fires fast */}
         <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-          建設業の AI 活用を、
+          設計図の読解で止まる現場を、
           <br className="hidden sm:inline" />
-          <span className="text-brand-amber">6 ヶ月</span>で標準化する。
+          <span className="text-brand-amber">なくす。</span>
         </h1>
 
         <motion.p
@@ -57,8 +58,17 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="mt-10"
+        >
+          <TierCTAButtons pageId="v1" />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.35 }}
-          className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center"
+          className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center"
         >
           <Button
             size="lg"
