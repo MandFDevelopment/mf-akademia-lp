@@ -22,7 +22,7 @@ const TIERS = [
     tier: "manager" as const,
     href: "#contact",
     label: "現場担当者の方へ",
-    sub: "助成金完全活用ガイドを無料DL",
+    sub: "MF-AKADEMIAの説明資料ダウンロード",
     Icon: FileSpreadsheet,
   },
 ] as const
