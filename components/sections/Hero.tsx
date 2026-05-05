@@ -38,9 +38,9 @@ export function Hero() {
 
         {/* LCP element — render immediately (no initial opacity:0) so LCP fires fast */}
         <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-          建設業の AI 活用を、
+          設計図の読解で止まる現場を、
           <br className="hidden sm:inline" />
-          <span className="text-brand-amber">6 ヶ月</span>で標準化する。
+          <span className="text-brand-amber">なくす。</span>
         </h1>
 
         <motion.p

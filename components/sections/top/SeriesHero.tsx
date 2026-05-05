@@ -34,9 +34,9 @@ export function SeriesHero() {
         </motion.p>
 
         <h1 className="mt-5 max-w-4xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-          建設業の AI 活用を、
+          設計図の読解で止まる現場を、
           <br className="hidden sm:inline" />
-          <span className="text-brand-amber">体系的に</span>学ぶ。
+          <span className="text-brand-amber">なくす。</span>
         </h1>
 
         <motion.p
