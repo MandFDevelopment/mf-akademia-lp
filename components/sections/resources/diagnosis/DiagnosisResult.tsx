@@ -160,9 +160,6 @@ export function DiagnosisResult({ score, zone }: DiagnosisResultProps) {
 
         <blockquote className="border-l-4 border-brand-amber pl-4 italic text-brand-amber print:border-black print:text-black">
           「{copy.maakoQuote}」
-          <footer className="mt-1 text-xs not-italic text-white/50 print:text-black/60">
-            — Maako (M&amp;F 創業者) 取材より
-          </footer>
         </blockquote>
 
         <div className="rounded-lg border border-brand-amber/40 bg-brand-amber/10 p-4 text-sm leading-relaxed print:border-black print:bg-transparent">

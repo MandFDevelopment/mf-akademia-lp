@@ -1,6 +1,6 @@
 import Link from "next/link"
 import type { Metadata } from "next"
-import { ArrowDown, ChevronLeft, MessageSquareQuote } from "lucide-react"
+import { ArrowDown, ChevronLeft } from "lucide-react"
 import { Nav } from "@/components/sections/Nav"
 import { Footer } from "@/components/sections/Footer"
 import { Button } from "@/components/ui/button"
@@ -11,16 +11,16 @@ import { YouthVision } from "@/components/sections/resources/diagnosis/YouthVisi
 import { FutureVision } from "@/components/sections/resources/diagnosis/FutureVision"
 
 export const metadata: Metadata = {
-  title: "次世代建設業 移行診断 — 貴社はどちら側に立つか | MF-AKADEMIA",
+  title: "建設業のこれから — 15 の問い | MF-AKADEMIA",
   description:
-    "業界 25 年の専門集団が、貴社の現在地を 15 問で診断します。スコアではなく、貴社が今どこに立っているかを率直にお伝えします。所要時間 約 3 分。",
+    "業界 25 年の専門集団が、貴社の現在地を 15 の問いで見つめます。スコアではなく、貴社が今どこに立っているかを率直にお伝えします。所要時間 約 3 分。",
   alternates: {
     canonical: "/resources/diagnosis",
   },
   openGraph: {
-    title: "次世代建設業 移行診断 | MF-AKADEMIA",
+    title: "建設業のこれから — 15 の問い | MF-AKADEMIA",
     description:
-      "踏み出す勇気ではない。見えていないだけ。15 問のセルフ診断 + 業界ビジョン。",
+      "踏み出す勇気ではない。見えていないだけ。15 のセルフチェック + 業界ビジョン。",
     url: "/resources/diagnosis",
     type: "article",
   },
@@ -61,7 +61,7 @@ export default function DiagnosisResourcePage() {
               Resource A / Diagnosis
             </p>
             <h1 className="mt-4 max-w-3xl text-3xl font-bold leading-tight tracking-tight sm:text-4xl lg:text-5xl">
-              次世代建設業 移行診断
+              建設業のこれから — 15 の問い
               <span className="mt-3 block text-xl font-medium text-white/85 sm:text-2xl print:text-black/80">
                 — 貴社はどちら側に立つか
               </span>
@@ -71,7 +71,7 @@ export default function DiagnosisResourcePage() {
                 踏み出す勇気ではない。見えていないだけ。
               </span>
               <br />
-              業界 25 年の専門集団が、貴社の現在地を 15 問で診断します。スコアではなく、貴社が今どこに立っているかを率直にお伝えします。
+              業界 25 年の専門集団が、貴社の現在地を 15 の問いで見つめます。スコアではなく、貴社が今どこに立っているかを率直にお伝えします。
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3 text-xs text-white/60 print:text-black/70">
               <span className="rounded-full border border-white/20 px-3 py-1">
@@ -91,14 +91,14 @@ export default function DiagnosisResourcePage() {
                 render={<a href="#diagnosis" />}
                 className="bg-brand-amber text-primary hover:bg-brand-amber/90"
               >
-                診断を始める
+                問いに答える
                 <ArrowDown className="ml-2 size-4" />
               </Button>
             </div>
           </div>
         </section>
 
-        {/* [2] 業界の現状診断 — "とにかくもうダメな業界" */}
+        {/* [2] 業界の現状 — 経営会議で出ている言葉 */}
         <section
           id="excuses"
           aria-labelledby="excuses-heading"
@@ -134,28 +134,11 @@ export default function DiagnosisResourcePage() {
               ))}
             </ol>
 
-            <div className="mt-10 rounded-2xl border border-destructive/30 bg-destructive/5 p-6 text-center">
-              <MessageSquareQuote
-                className="mx-auto size-6 text-destructive"
-                aria-hidden
-              />
-              <p className="mt-3 text-xl font-bold text-destructive sm:text-2xl">
-                「とにかくもうダメな業界」
-              </p>
-              <p className="mt-2 text-xs text-muted-foreground">
-                — Maako 取材記録より、業界の現状診断
-              </p>
-            </div>
-
             <div className="mt-10 text-center">
               <p className="text-xl font-semibold text-primary sm:text-2xl">
-                でも本当にそうでしょうか?
+                こうした言葉が、貴社の経営会議で出ていませんか?
               </p>
             </div>
-
-            <p className="mt-6 text-xs leading-relaxed text-muted-foreground">
-              ※ 引用根拠: 第 13 章「ビジネスの成果をアップグレードする」(印刷 p.359)「会社を成長させるのは誠実な行動」。業界の暗部を率直に開示することは、信頼の最初の一歩。
-            </p>
           </div>
         </section>
 
@@ -178,9 +161,6 @@ export default function DiagnosisResourcePage() {
 
             <blockquote className="mt-8 rounded-2xl border-l-4 border-brand-amber bg-background p-6 text-xl font-semibold leading-relaxed text-primary sm:p-8 sm:text-2xl">
               「踏み出す勇気ではなくて見えない、ただそれだけ」
-              <footer className="mt-3 text-xs font-normal not-italic text-muted-foreground">
-                — Maako (M&amp;F 創業者) 取材より
-              </footer>
             </blockquote>
 
             <div className="mt-10 space-y-5 text-base leading-relaxed text-foreground">
@@ -198,17 +178,13 @@ export default function DiagnosisResourcePage() {
                 海外勢は、踏み込まない方が良いということを、ちゃんと理解しています (日本は地震が多いから)。日本の建設業に求められる精度・段取り・品質管理は、海外の効率性優先のモデルでは届きません。だからこそ、日本の建設業は、独自の進化を遂げる必要があります。
               </p>
               <p>
-                次のセクションの 15 問の診断は、貴社の「視界がどこまで開いているか」を測るものです。スコアの高低を競うものではなく、現在地を率直に確認するためのツールです。
+                次のセクションの 15 の問いは、貴社の「視界がどこまで開いているか」を見つめるものです。スコアの高低を競うものではなく、現在地を率直に確認するためのツールです。
               </p>
             </div>
-
-            <p className="mt-8 text-xs leading-relaxed text-muted-foreground">
-              ※ 引用根拠: 第 14 章「自分のターゲット市場を知る」(印刷 p.379)「顧客の『心理的安全地帯』にマーケティングする」。診断は経営者の心理的安全地帯から始め、視界を開くプロセスとして設計されています。
-            </p>
           </div>
         </section>
 
-        {/* [4][5] 診断 + 結果 (インタラクティブ) */}
+        {/* [4][5] セルフチェック + 結果 (インタラクティブ) */}
         <section
           id="diagnosis"
           aria-labelledby="diagnosis-heading"
@@ -222,7 +198,7 @@ export default function DiagnosisResourcePage() {
               id="diagnosis-heading"
               className="mt-3 text-2xl font-bold tracking-tight text-primary sm:text-3xl"
             >
-              診断 ― 貴社はどちら側か
+              15 の問い ― 貴社はどちら側か
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
               4 択でお答えください。各設問は、業界 25 年の現場感覚から組み立てた経営者向けセルフチェックです。「正解」を当てるテストではなく、現状を直視するためのものです。
@@ -233,7 +209,7 @@ export default function DiagnosisResourcePage() {
             </div>
 
             <p className="mt-8 text-xs leading-relaxed text-muted-foreground">
-              ※ 移行度は 20% / 40% / 60% / 80% の 4 段階で示します。100% は意図的に設けていません ― 完成は永続改善の敵だからです。引用根拠: 第 15 章「顧客を教育する」(印刷 p.415-416)「事実に即した話をするほど、好感度が上がる」。
+              ※ 移行度は 20% / 40% / 60% / 80% の 4 段階で示します。100% は意図的に設けていません ― 完成は永続改善の敵だからです。
             </p>
           </div>
         </section>
@@ -267,7 +243,7 @@ export default function DiagnosisResourcePage() {
               先が、見えてきましたか
             </h2>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-              診断結果や、3 年後の姿について、率直に話しませんか。押し売りはしません。「踏み出した先の景色」を、もう少し鮮明にする会話のきっかけになれば幸いです。
+              貴社の結果や、3 年後の姿について、率直に話しませんか。押し売りはしません。「踏み出した先の景色」を、もう少し鮮明にする会話のきっかけになれば幸いです。
             </p>
 
             <div className="mt-10 grid gap-3 sm:grid-cols-3">
@@ -293,7 +269,7 @@ export default function DiagnosisResourcePage() {
                 nativeButton={false}
                 render={<a href="#diagnosis" />}
               >
-                もう一度診断する
+                もう一度答える
               </Button>
             </div>
           </div>

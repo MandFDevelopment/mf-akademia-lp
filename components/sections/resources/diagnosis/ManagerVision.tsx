@@ -62,9 +62,6 @@ export function ManagerVision() {
 
         <blockquote className="mt-8 border-l-4 border-brand-amber bg-background p-5 italic text-primary">
           「いつも忙しい。それは自分で仕事を回してると勘違いしてて、もっと部下が自走できるような仕掛けが必要だと感じる」
-          <footer className="mt-2 text-xs not-italic text-muted-foreground">
-            — Maako (M&amp;F 創業者) 取材より
-          </footer>
         </blockquote>
 
         <h3 className="mt-12 text-lg font-semibold text-primary">
@@ -106,21 +103,11 @@ export function ManagerVision() {
 
         <blockquote className="mt-6 border-l-4 border-brand-amber bg-background p-5 italic text-primary">
           「忙しい理由を整理しない。逆に混乱していることを分析してほしい。そしてそれを見える化してみんなに評価してもらってほしい。そのくらいカッコつけないでほしい」
-          <footer className="mt-2 text-xs not-italic text-muted-foreground">
-            — Maako (M&amp;F 創業者) 取材より
-          </footer>
         </blockquote>
 
         <blockquote className="mt-4 border-l-4 border-destructive/60 bg-background p-5 italic text-destructive">
           「わからないで済ます部下への回答がどれほど愚かなことか」
-          <footer className="mt-2 text-xs not-italic text-muted-foreground">
-            — Maako (M&amp;F 創業者) 取材より
-          </footer>
         </blockquote>
-
-        <p className="mt-8 text-xs leading-relaxed text-muted-foreground">
-          ※ 引用根拠: 第 10 章「機能よりもメリット」(印刷 p.314-316)。「機能自体には意味がない。機能がもたらすメリットこそが肝心」。中年代技術者の理想は、肩書きや忙しさという「機能」ではなく、組織の生産性という「メリット」を生む位置に立つこと。
-        </p>
       </div>
     </section>
   )

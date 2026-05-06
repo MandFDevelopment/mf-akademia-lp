@@ -82,9 +82,6 @@ export function ExperienceEngineeringTrap() {
 
         <blockquote className="mt-8 border-l-4 border-brand-amber bg-secondary/50 p-5 italic text-primary">
           「AI エンジニアが良かれと思って作ったけど、現場でなにも役に立たないものを作った、というイメージ」
-          <footer className="mt-2 text-xs not-italic text-muted-foreground">
-            — Maako (M&amp;F 創業者) 取材より
-          </footer>
         </blockquote>
 
         <div className="mt-10 space-y-5 text-base leading-relaxed text-foreground">
@@ -102,9 +99,6 @@ export function ExperienceEngineeringTrap() {
           </p>
         </div>
 
-        <p className="mt-8 text-xs leading-relaxed text-muted-foreground">
-          ※ 引用根拠: 第 7 章「USP」(印刷 p.230-232)「USP はひとつの文章で表現するのが理想的」。MF-AKADEMIA の USP は、機能の列挙ではなく「経験ある建築屋が設計した AI 教育」という単一の特異性に集約されます。
-        </p>
       </div>
     </section>
   )

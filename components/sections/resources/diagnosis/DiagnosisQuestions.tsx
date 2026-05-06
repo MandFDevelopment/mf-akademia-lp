@@ -120,7 +120,7 @@ export function DiagnosisQuestions() {
         </div>
       </div>
 
-      {/* 印刷時の代替表示 (未診断 or スコアサマリ) */}
+      {/* 印刷時の代替表示 (未回答 or スコアサマリ) */}
       <div className="hidden print:block">
         {submitted ? (
           <p className="text-sm">
@@ -128,7 +128,7 @@ export function DiagnosisQuestions() {
             {currentZone.label} / 移行度 {currentZone.pct}%)
           </p>
         ) : (
-          <p className="text-sm font-semibold">未診断</p>
+          <p className="text-sm font-semibold">未回答</p>
         )}
       </div>
 

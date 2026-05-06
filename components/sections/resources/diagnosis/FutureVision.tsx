@@ -20,7 +20,7 @@ const FUTURE_CARDS: readonly FutureCardData[] = [
       "とても生き生きした、どちらかというとかっこいい仕事できそうな顔してる。自信に満ちてる",
       "だってその先が見えてるんだもん",
     ],
-    body: "「踏み出す勇気がない」のではなく「先が見えていない」だけだった経営者が、3 年で逆側に立つ。これが移行診断の最終ゴールです。",
+    body: "「踏み出す勇気がない」のではなく「先が見えていない」だけだった経営者が、3 年で逆側に立つ。これが 15 の問いの最終ゴールです。",
   },
   {
     Icon: GraduationCap,
@@ -122,9 +122,6 @@ export function FutureVision() {
           </p>
           <blockquote className="mt-4 text-xl font-semibold leading-relaxed text-white sm:text-2xl print:text-black">
             「日本の建設業でそれができる企業が出てくるかは別問題。でも僕はそう思ってる」
-            <footer className="mt-3 text-xs font-normal not-italic text-white/60 print:text-black/70">
-              — Maako (M&amp;F 創業者)
-            </footer>
           </blockquote>
 
           <p className="mt-8 text-base leading-relaxed text-white/85 sm:text-lg print:text-black">
@@ -132,9 +129,6 @@ export function FutureVision() {
           </p>
         </div>
 
-        <p className="mt-10 text-xs leading-relaxed text-white/50 print:text-black/60">
-          ※ 引用根拠: 第 15 章「顧客を教育する」(印刷 p.397)「ストーリーを語れ!」。3 年後の景色は、機能の説明ではなく、組織が変わった結果としての顔つきとして語る。
-        </p>
       </div>
     </section>
   )

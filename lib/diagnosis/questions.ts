@@ -1,7 +1,7 @@
 /**
- * 次世代建設業 移行診断 — 15問のセルフチェック
+ * 建設業のこれから — 15 の問い (セルフチェック)
  *
- * 取材記録: proposals/02_resource_a_interview_2026-05-05.md §7.2
+ * 元資料: proposals/02_resource_a_interview_2026-05-05.md §7.2
  * 採点: 4択 [0, 1, 3, 4] (中間2点なし、Maako確定)
  * 逆スコア対象: Q3 / Q9 / Q10 / Q11 / Q15 (否定形質問、文意で危機側=高スコア)
  * ゾーン: 0-19=危機 / 20-34=停滞 / 35-49=覚醒 / 50-60=先導
@@ -12,7 +12,7 @@ export type ScoreDirection = "positive" | "negative"
 
 export type DiagnosisQuestion = {
   id: string
-  /** 設問本文 (Maako 取材記録 §7.2 原文ママ) */
+  /** 設問本文 (Maako §7.2 原文ママ) */
   text: string
   direction: ScoreDirection
 }

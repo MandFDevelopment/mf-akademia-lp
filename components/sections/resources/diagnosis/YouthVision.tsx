@@ -47,9 +47,6 @@ export function YouthVision() {
 
         <blockquote className="mt-6 border-l-4 border-destructive/60 bg-secondary p-5 italic text-foreground">
           「挫折、ミス、業務過多、残業、休日出勤、無給」
-          <footer className="mt-2 text-xs not-italic text-muted-foreground">
-            — Maako (M&amp;F 創業者) 取材より、業界の現実
-          </footer>
         </blockquote>
 
         {/* 業界の魅力 */}
@@ -58,9 +55,6 @@ export function YouthVision() {
         </h3>
         <blockquote className="mt-4 border-l-4 border-brand-amber bg-secondary p-5 italic text-primary">
           「完成した建物などは、携わった人間しか理解できない達成感がある。それはとても素晴らしい」
-          <footer className="mt-2 text-xs not-italic text-muted-foreground">
-            — Maako (M&amp;F 創業者) 取材より
-          </footer>
         </blockquote>
         <p className="mt-5 text-base leading-relaxed text-foreground">
           若手が辞めずに残るかどうかを左右するのは、給与でも残業時間でもなく (もちろんそれらは重要ですが)、この達成感への通路を 3 年以内に開けるかどうかです。「いずれわかる」では遅い。3 年で開かないなら、若手は別の業界を選びます。
@@ -72,9 +66,6 @@ export function YouthVision() {
         </h3>
         <blockquote className="mt-4 border-l-4 border-brand-amber bg-secondary p-5 italic text-primary">
           「言葉では理解しても現実として実践出来てるかは疑問」「この時代では絶対にダメな習慣」
-          <footer className="mt-2 text-xs not-italic text-muted-foreground">
-            — Maako (M&amp;F 創業者) 取材より
-          </footer>
         </blockquote>
         <p className="mt-5 text-base leading-relaxed text-foreground">
           「若手育成は大事」とすべての経営者が言います。しかし、現場の運用は「背中で覚えろ」のままで、具体的な習得経路は描けていない ― これが業界の隠れた共通課題です。言葉のレベルではなく、組織の運用としての習慣を変える必要があります。
@@ -86,9 +77,6 @@ export function YouthVision() {
         </h3>
         <blockquote className="mt-4 border-l-4 border-brand-amber bg-secondary p-5 italic text-primary">
           「3 年目で自分がマネージャーとして立ち振る舞うイメージを持ってほしい。そうするとどこが足りないかが見えてきて、それをどう解決するかを見える化する」
-          <footer className="mt-2 text-xs not-italic text-muted-foreground">
-            — Maako (M&amp;F 創業者) 取材より
-          </footer>
         </blockquote>
 
         <div className="mt-8 space-y-5 text-base leading-relaxed text-foreground">
@@ -102,9 +90,6 @@ export function YouthVision() {
           </p>
         </div>
 
-        <p className="mt-8 text-xs leading-relaxed text-muted-foreground">
-          ※ 引用根拠: 第 13 章「ビジネスの成果をアップグレードする」(印刷 p.359)「会社を成長させるのは誠実な行動」。業界の闇を率直に開示することは、若手にとっての信頼の最初の一歩。
-        </p>
       </div>
     </section>
   )

@@ -15,7 +15,7 @@ const TIERS = [
     tier: "executive" as const,
     href: "/resources/diagnosis",
     label: "経営者・決裁者の方へ",
-    sub: "次世代建設業 移行診断(無料・3分)",
+    sub: "建設業のこれから — 15 の問い(無料・3分)",
     Icon: Compass,
   },
   {
