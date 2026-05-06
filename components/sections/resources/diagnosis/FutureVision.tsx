@@ -29,7 +29,7 @@ const FUTURE_CARDS: readonly FutureCardData[] = [
     quotes: [
       "やっとデータ思考、BIM の本当の正体、AI の正体や使い方が理解できて、むしろ更に技術者としての研鑽ができている",
     ],
-    body: "AI が技術者の仕事を奪うのではなく、データ思考が体に染みた中年代技術者だからこそ、技術者としての研鑽が一段深くなる ― これが Maako の現場感覚です。",
+    body: "AI が技術者の仕事を奪うのではなく、データ思考が体に染みた中年代技術者だからこそ、技術者としての研鑽が一段深くなる ― これが私たちの現場感覚です。",
   },
   {
     Icon: Sparkles,
@@ -118,7 +118,7 @@ export function FutureVision() {
         {/* Maakoの最後の確信 */}
         <div className="mt-14 rounded-2xl border border-brand-amber/40 bg-brand-amber/10 p-6 sm:p-8 print:border-black print:bg-transparent">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-amber print:text-black">
-            Maako の最後の確信
+            M&amp;F の最後の確信
           </p>
           <blockquote className="mt-4 text-xl font-semibold leading-relaxed text-white sm:text-2xl print:text-black">
             「日本の建設業でそれができる企業が出てくるかは別問題。でも僕はそう思ってる」

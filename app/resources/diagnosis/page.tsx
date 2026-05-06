@@ -115,7 +115,7 @@ export default function DiagnosisResourcePage() {
               踏み出さない経営者の、9 つのセリフ
             </h2>
             <p className="mt-5 text-base leading-relaxed text-foreground">
-              これらは Maako (M&amp;F 創業者) が業界 25 年の中で、現場で繰り返し聞いてきた言葉です。皆さまの社内会議でも、いずれかが出ていないでしょうか。
+              これらは M&amp;F が業界 25 年の中で、現場で繰り返し聞いてきた言葉です。皆さまの社内会議でも、いずれかが出ていないでしょうか。
             </p>
 
             <ol className="mt-8 space-y-3 text-sm sm:text-base">
@@ -172,7 +172,7 @@ export default function DiagnosisResourcePage() {
               <p>
                 しかし、止まっている本当の理由は、勇気の欠如ではありません。
                 <span className="font-semibold">踏み出した先がどうなるかが、見えていない</span>
-                だけです。視界の問題なのです。視界が開けば判断は自動的に変わる ― これは、業界の数百社を見てきた Maako の実感です。
+                だけです。視界の問題なのです。視界が開けば判断は自動的に変わる ― これは、業界の数百社を見てきた私たちの実感です。
               </p>
               <p>
                 海外勢は、踏み込まない方が良いということを、ちゃんと理解しています (日本は地震が多いから)。日本の建設業に求められる精度・段取り・品質管理は、海外の効率性優先のモデルでは届きません。だからこそ、日本の建設業は、独自の進化を遂げる必要があります。
